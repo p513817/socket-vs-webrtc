@@ -34,7 +34,10 @@ async function logError (xhr, _textStatus, _errorThrown) {
     return( errMsg );
 }
 
-async function getAPI(api, errType=LOG, log=false) {
+async function getAPI(api, errType=LOG, log=false, pureURL=false) {
+
+    let trg_api = api;
+    if(pureURL===false) trg_api = SCRIPT_ROOT + api;
 
     if(log) console.log(`[GET] Called API: ${api}`);
 
@@ -43,9 +46,11 @@ async function getAPI(api, errType=LOG, log=false) {
     if (errType === ALERT) errEvent = alertError;
     else errEvent = logError;
 
+    
+
     // Call API
     const data = await $.ajax({
-        url: SCRIPT_ROOT + api,
+        url: trg_api,
         type: "GET",
         dataType: "json",
         error: errEvent
@@ -55,8 +60,12 @@ async function getAPI(api, errType=LOG, log=false) {
     else return(undefined);
 }
 
-async function postAPI(api, inData, inType=JSON_FMT, errType=LOG) {
+async function postAPI(api, inData, inType=JSON_FMT, errType=LOG, pureURL=false) {
     
+    let trg_api = api;
+    if(pureURL===false) trg_api = SCRIPT_ROOT + api;
+    
+
     // Setup error event
     let errEvent
     let retData;
@@ -66,7 +75,7 @@ async function postAPI(api, inData, inType=JSON_FMT, errType=LOG) {
     // Call API
     if(inType===FORM_FMT){
         retData = await $.ajax({
-            url: SCRIPT_ROOT + api,
+            url: trg_api,
             type: "POST",
             data: inData,
             processData: false,
