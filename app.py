@@ -174,8 +174,6 @@ def socket_stream_task(src):
             app.config[TASK].update( {FRAME: []} )
 
         app.config[TASK][FRAME] = frame_base64
-
-        time.sleep(1/5)
         
     logging.info('Stop streaming')
 
