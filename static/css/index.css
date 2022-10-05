@@ -1,0 +1,39 @@
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left{
+    width: 50%;
+}
+
+.right{
+    width: 50%;
+}
+
+.frame {
+    width: 100%;
+}
+
+.webrtcURL{
+    width: 100%;
+}
+
+.webrtc-left {
+    width: 40%;
+}
+
+.webrtc-right {
+    width: 60%;
+}
+
+.wid-2 { width: 20%; }
+.wid-3 { width: 30%; }
+.wid-5 { width: 50%; }
+.wid-6 { width: 60%; }
+.wid-7 { width: 70%; }
+.wid-8 { width: 80%; }
+.wid-full { width: 100%; }
+
+    
