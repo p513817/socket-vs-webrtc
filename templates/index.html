@@ -5,10 +5,38 @@
 </head>
 <body>
 
+    <h1>Control WebRTC</h1>
     <div class="container">
-
+        
         <div class="left">
-            <h1>Socket Strean</h1>
+            <div class="container">
+                <div class="left">
+                    <label>RTSP NAME </label>
+                    <input name="rtsp-name" id="rtsp-name" value="custom">
+                </div>
+                <div class="right">
+                    <label>RTSP URL </label>
+                    <input name="rtsp-url" id="rtsp-url"
+                        value="rtsp://172.16.92.130:8999/test">
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="container control-area">
+                <div class="left">
+                    <button onclick="addStream()" class="bt">Add Stream</button>
+                </div>
+                <div class="right">
+                    <button onclick="delStream()" class="bt">Delete Stream</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Compare Socket and WebRTC</h1>
+    <div class="container">
+        <div class="left">
+            <h2>Socket Strean</h2>
             <div class="wid-full"> 
                 <button id="socketButton" onclick="startSocketStream()">START</button>
                 <button id="socketStopButton" onclick="stopSocketStream()">STOP</button>
@@ -20,15 +48,17 @@
         </div>
 
         <div class="right">
-            <h1>WebRTC Sample</h1>
+            <h2>WebRTC Sample</h2>
             <div class="container">
                 <div class="webrtc-left">
                     <button id="connectBt" onclick="connectStream()">CONNECT</button>
                     <button id="stopBt" onclick="stopStream()">STOP</button>
                 </div>
                 <div class="webrtc-right">
-                    <input name="webrtc-url" id="webrtc-url" class="webrtcURL"
-                    value="http://172.16.92.130:8083/stream/demo/channel/0/webrtc">
+                    <!-- <input name="webrtc-url" id="webrtc-url" class="webrtcURL"
+                    value="http://172.16.92.130:8083/stream/demo/channel/0/webrtc"> -->
+                    <select id="stream-list">
+                    </select>  
                 </div>
             </div>
                 
