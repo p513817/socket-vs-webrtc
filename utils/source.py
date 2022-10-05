@@ -130,7 +130,7 @@ class Source():
             self.src=None
     
     def read(self):
-        return self.ret, self.frame.copy()
+        return self.ret, self.frame
     
     def get_shape(self):
         w, h = self.src.get(cv2.CAP_PROP_FRAME_WIDTH), self.src.get(cv2.CAP_PROP_FRAME_HEIGHT)  
