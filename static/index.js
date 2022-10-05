@@ -25,6 +25,8 @@ $(document).ready(async function () {
 
     document.getElementById('webrtc-video').controls = false;
 
+    getStreamList();
+
 });
 
 function getTaskFrame() {
@@ -67,4 +69,92 @@ async function stopRTSPStream() {
     if (! data) return undefined;
     console.log(data);
 
+}
+
+function getStreamList(){
+    let url;
+    url = "http://demo:demo@127.0.0.1:8083/streams";
+    url = "http://172.16.92.130:8083/streams"
+
+    const steamList = document.getElementById("stream-list");
+
+    $.ajax({
+        url:url,
+        type:'GET',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+        },        
+        success: function(data){
+
+            steamList.innerHTML = "";
+            
+            data = data["payload"]
+            for ( const key in data ){
+                console.log(key, data[key]);
+                var option = document.createElement("option");
+                option.value = key;
+                option.text = key;
+                steamList.appendChild(option);
+            }
+        }
+    })
+}
+
+function delStream(){
+    let url;
+    let streamID;
+
+    streamID = document.getElementById("rtsp-name").value;
+    url = `http://172.16.92.130:8083/stream/${streamID}/delete`
+
+    $.ajax({
+        url:url,
+        type:'GET',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+        },        
+        success: function(data){
+            console.log(data);
+            getStreamList();
+        }
+    })
+}
+
+function addStream(){
+    let url;
+    let streamID;
+    let streamRTSP;
+    
+    streamID = document.getElementById("rtsp-name").value;
+    streamRTSP = document.getElementById("rtsp-url").value;
+
+    url = `http://172.16.92.130:8083/stream/${streamID}/add`;
+
+    let inData =  {
+        "name": "custom video",
+        "channels": {
+            "0": {
+                "name": "ch1",
+                "url": streamRTSP,
+                "on_demand": false,
+                "debug": false,
+                "status": 0
+            }
+        }
+    }
+
+    $.ajax({
+        url:url,
+        type:'POST',
+        data: JSON.stringify(inData),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+        },        
+        success: function(data){
+            console.log(data);
+            getStreamList();
+        }
+    })
 }
