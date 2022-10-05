@@ -1,0 +1,30 @@
+{
+    "server": {
+        "debug": true,
+        "log_level": "info",
+        "http_demo": true,
+        "http_debug": false,
+        "http_login": "demo",
+        "http_password": "demo",
+        "http_port": ":8083",
+        "ice_servers": [
+            "stun:stun.l.google.com:19302"
+        ],
+        "rtsp_port": ":5541"
+    },
+    "streams": {
+        "demo": {
+            "name": "test video stream 1",
+            "channels": {
+                "0": {
+                    "name": "ch1",
+                    "url": "rtsp://172.16.92.130:8999/test",
+                    "on_demand": true,
+                    "debug": false,
+                    "audio": true,
+                    "status": 0
+                }
+            }
+        }
+    }
+}
