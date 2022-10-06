@@ -113,7 +113,6 @@ async function getStreamList(){
     steamList.innerHTML = "";
     data = data["payload"];
     for ( const key in data ){
-        console.log(key, data[key]);
         var option = document.createElement("option");
         option.value = key;
         option.text = key;
@@ -231,10 +230,7 @@ async function addSrc(){
     }
 
     let formData = new FormData()
-    for ( let key in inData ) {
-        console.log(key, inData[key]);
-        formData.append(key, inData[key]);
-    }
+    for ( let key in inData ) formData.append(key, inData[key]);
     console.log("Finish Form Data");
     
     // Create Source
