@@ -58,19 +58,9 @@
     <h1>Compare Socket and WebRTC</h1>
 
     <!-- Select Source -->
-    <div class="container wid-full">
-        
-        <div class="wid-3">
-            <h2>1. Select Source</h2>
-        </div>
-
-        <div class="wid-7">
-            <p>Source List</p>
-            <div class="wid-full">
-                <select id="stream-list">
-                </select>  
-            </div>    
-        </div>
+    <div class="wid-full">
+        <a>Source List  </a>
+        <select id="stream-list"></select>  
     </div>
 
     <hr>
@@ -79,7 +69,7 @@
     <div class="container">
 
         <div class="left">
-            <h2>2. Socket Strean</h2>
+            <h2>Socket Sample</h2>
             <div class="wid-full"> 
                 <button id="socketButton" onclick="startSocketStream()">START</button>
                 <button id="socketStopButton" onclick="stopSocketStream()">STOP</button>
@@ -108,6 +98,7 @@
 
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
     <!-- Socket.IO 的 CDN 連結 -->
 
