@@ -5,43 +5,85 @@
 </head>
 <body>
 
-    <h1>Control WebRTC</h1>
-    <div class="container">
+    <h1>Create RTSP and WebRTC</h1>
+
+    <!-- WebRTC Control -->
+
+    <!-- Control Source -->
+    <div class="container wid-full">
         
-        <div class="left">
-            <div class="container">
-                <div class="left">
-                    <label>RTSP NAME </label>
-                    <input name="rtsp-name" id="rtsp-name" value="custom">
-                </div>
-                <div class="right">
-                    <label>RTSP URL </label>
-                    <input name="rtsp-url" id="rtsp-url"
-                        value="rtsp://172.16.92.130:8999/test">
-                </div>
-            </div>
+        <div class="wid-2">
+            <p>Source Name</p>
+            <input type="text" id="source-name" value="default">
         </div>
-        <div class="right">
-            <div class="container control-area">
-                <div class="left">
-                    <button onclick="addStream()" class="bt">Add Stream</button>
-                </div>
-                <div class="right">
-                    <button onclick="delStream()" class="bt">Delete Stream</button>
-                </div>
+        
+        <div class="wid-2">
+
+            <p>Source Type</p>
+            <select id="source-type">
+                <option>--- Select ---</option>
+                <option value="V4L2">USB-Cam</option>
+                <option value="RTSP">RTSP</option>
+                <option value="File">File</option>
+            </select>
+        </div>
+
+        <div class="wid-2">
+
+            <p>Source</p>
+            <div id="source-v4l2-div" class="" style="display: block">
+                <select id="source-v4l2">
+                    <option>--- Select ---</option>
+                </select>
             </div>
+            <div id="source-rtsp-div" style="display: none">
+                <input id="source-rtsp" type="text" class="bg-light border-0" placeholder="" aria-label="source-rtsp">
+            </div>
+            <div id="source-file-div" style="display: none">
+                <input type="file" accept="image/*,video/*" class="custom-file-input" data-target="source-file" id="source-file">
+            </div>
+
+        </div>
+
+        <div class="wid-2">
+            <p>Event</p>
+            <button id="addSrcButton" onclick="addSrc()">Add</button>
+            <button id="delSrcButton" onclick="delSrc()">Del</button>
+
+        </div>
+        
+    </div>
+
+    
+    <h1>Compare Socket and WebRTC</h1>
+
+    <!-- Select Source -->
+    <div class="container wid-full">
+        
+        <div class="wid-3">
+            <h2>1. Select Source</h2>
+        </div>
+
+        <div class="wid-7">
+            <p>Source List</p>
+            <div class="wid-full">
+                <select id="stream-list">
+                </select>  
+            </div>    
         </div>
     </div>
 
-    <h1>Compare Socket and WebRTC</h1>
+    <hr>
+
+    <!-- Compare -->
     <div class="container">
+
         <div class="left">
-            <h2>Socket Strean</h2>
+            <h2>2. Socket Strean</h2>
             <div class="wid-full"> 
                 <button id="socketButton" onclick="startSocketStream()">START</button>
                 <button id="socketStopButton" onclick="stopSocketStream()">STOP</button>
             </div>
-            <hr>
             <div class="wid-full">
                 <image id="img" class="frame"></image>
             </div>
@@ -50,19 +92,12 @@
         <div class="right">
             <h2>WebRTC Sample</h2>
             <div class="container">
-                <div class="webrtc-left">
+                <div class="wid-full">
                     <button id="connectBt" onclick="connectStream()">CONNECT</button>
                     <button id="stopBt" onclick="stopStream()">STOP</button>
                 </div>
-                <div class="webrtc-right">
-                    <!-- <input name="webrtc-url" id="webrtc-url" class="webrtcURL"
-                    value="http://172.16.92.130:8083/stream/demo/channel/0/webrtc"> -->
-                    <select id="stream-list">
-                    </select>  
-                </div>
             </div>
                 
-            <hr>
             <video id="webrtc-video" autoplay muted playsinline controls="false"
                 class="frame"></video>
         </div>
