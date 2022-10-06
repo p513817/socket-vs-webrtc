@@ -37,6 +37,7 @@ async function logError (xhr, _textStatus, _errorThrown) {
 async function getAPI(api, errType=LOG, log=false, author) {
 
     // Concate API
+    $.LoadingOverlay("show");
     let trg_api;
     if(api.includes("http")) trg_api = api;
     else trg_api = SCRIPT_ROOT + api;
@@ -59,6 +60,7 @@ async function getAPI(api, errType=LOG, log=false, author) {
             } else console.log("None authorize");
         }
     });
+    $.LoadingOverlay("hide");
     // Return Data
     if (data) return data;
     else return(undefined);
@@ -67,6 +69,7 @@ async function getAPI(api, errType=LOG, log=false, author) {
 async function postAPI(api, inData, inType=JSON_FMT, errType=LOG, log=false, author) {
     
     // Concate API
+    $.LoadingOverlay("show");
     let trg_api;
     if(api.includes("http")) trg_api = api;
     else trg_api = SCRIPT_ROOT + api;
@@ -113,6 +116,7 @@ async function postAPI(api, inData, inType=JSON_FMT, errType=LOG, log=false, aut
     }
 
     // Return Data
+    $.LoadingOverlay("hide");
     if (retData) return retData;
     else return(undefined);
 }
