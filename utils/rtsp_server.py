@@ -63,24 +63,43 @@ class GstServer():
     """
     Define Gstreamer Server
     """
-    def __init__(self, cam):
+    def __init__(self):
         # New RTSP Server
         self.server=GstRtspServer.RTSPOnvifServer.new()
         
+        self.header = "rtsp://127.0.0.1"
         self.port="8999"
         self.server.set_service(self.port)
         self.server.connect("client-connected",self.client_connected)
         self.server.attach(None)
-        factory = SensorFactory(cam)
-        factory.set_shared(True)
-        self.server.get_mount_points().add_factory("/test", factory)
-        #  start serving
-        print ("stream ready at rtsp://127.0.0.1:" + self.port + "/test")
-        #  this com IP address
-        print ("stream ready at rtsp://192.168.1.157:" + self.port+ "/test")
-    
+
+        # factory = SensorFactory(src)
+        # factory.set_shared(True)
+        # self.server.get_mount_points().add_factory("/test", factory)
+        
+        # self.add_source( 
+        #     src = src, 
+        #     path = "/test" 
+        # )
+
     def client_connected(self, arg1, arg2):      
-        print('Client connected')
+        # print('Client connected')
+        pass
+
+    def add_source(self, src, uri="/test", fps=30):
+        
+        factory = SensorFactory(src)
+        factory.fps = fps
+        factory.set_shared(True)
+        self.server.get_mount_points().add_factory(uri, factory)
+        
+        full_url = self.header + ":" + self.port + uri
+        logging.info("Create RTSP in {}".format(full_url))
+        return full_url
+    
+    def del_source(self, uri="/test"):
+        self.server.get_mount_points().remove_factory(uri)
+        
 
 class GstLoop():
     def __init__ (self):
@@ -94,23 +113,3 @@ class GstLoop():
     def stop(self):
         logging.warning("Stop GstLoop")
         self.loop.quit()
-    
-
-"""
-gst-launch-1.0 v4l2src device=/dev/video0 \
-! video/x-raw, width=1920, height=1080,framerate=30/1 \
-! videoconvert ! fpsdisplaysink video-sink="autovideosink" sync=false fullscreen-overlay=true
-
-gst-launch-1.0 v4l2src device=/dev/video0 \
-! image/jpeg, width=1920, height=1080,framerate=30/1 \
-! jpegparse ! jpegdec ! fpsdisplaysink video-sink="autovideosink" sync=false fullscreen-overlay=true
-
-gst-launch-1.0 \
-v4l2src device=/dev/video0 \
-! image/jpeg, width=1920, height=1080,framerate=30/1 \
-! jpegparse ! jpegdec ! fpsdisplaysink video-sink="autovideosink" sync=false fullscreen-overlay=true \
-v4l2src device=/dev/video2 \
-! image/jpeg, width=1920, height=1080,framerate=30/1 \
-! jpegparse ! jpegdec ! fpsdisplaysink video-sink="autovideosink" sync=false fullscreen-overlay=true
-
-"""

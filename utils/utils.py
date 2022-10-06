@@ -1,6 +1,9 @@
 # Basic
-import logging, os, colorlog, cv2, socket
-from threading import Thread
+import cv2, time, logging, base64, threading, os, sys, copy, json, colorlog, socket
+import traceback
+
+from flask import abort, request
+from werkzeug.utils import secure_filename
 
 import inspect, ctypes
 
@@ -78,3 +81,27 @@ def _async_raise(tid, exctype):
 def stop_thread(thread):
     _async_raise(thread.ident, SystemExit)
 
+def handle_exception(error, title="Error", exit=False):
+    
+    # Get Error Class ( type )
+    error_class = error.__class__.__name__ 
+    
+    # Get Detail
+    detail = error.args[0] 
+
+    # Get Call Stack
+    cl, exc, tb = sys.exc_info() 
+
+    # Last Data of Call Stack
+    last_call_stack = traceback.extract_tb(tb)[-1] 
+
+    # Parse Call Stack and Combine Error Message
+    file_name = last_call_stack[0] 
+    line_num = last_call_stack[1] 
+    func_name = last_call_stack[2] 
+    err_msg = "{} \nFile \"{}\", line {}, in {}: [{}] {}".format(title, file_name, line_num, func_name, error_class, detail)
+    
+    logging.error(err_msg)
+    if exit: sys.exit()
+
+    return err_msg

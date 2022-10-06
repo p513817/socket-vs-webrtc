@@ -1,10 +1,9 @@
 // Create P2P Service
-let webrtc; 
+let webrtc;
 
 const videoEl = document.querySelector('#webrtc-video')
-const webrtcUrl = document.querySelector('#webrtc-url').value
 
-function connectStream(url) {
+function connectStream() {
 
     console.log("Start to connect WebRTC");
 
@@ -18,7 +17,10 @@ function connectStream(url) {
     })
 
     // Check URL
-    if(url===undefined) url = webrtcUrl;
+    let trg_url;
+    let streamID = document.getElementById('stream-list').value;
+    trg_url = `http://172.16.92.130:8083/stream/${streamID}/channel/0/webrtc`;
+    console.log(`Get URL: ${trg_url}`);
 
     // ontrack
     // 完成連線後，透過該事件能夠在發現遠端傳輸的多媒體檔案時觸發，來處理/接收多媒體數據。
@@ -33,8 +35,8 @@ function connectStream(url) {
     /* About Transceiver
         Reference   : https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTransceiver
         Example     : rtpTransceiver = RTCPeerConnection.addTransceiver(trackOrKind, init);
-    */    
-   console.log("Add Transceiver");
+    */
+    console.log("Add Transceiver");
     webrtc.addTransceiver('video', { 'direction': 'sendrecv' })
 
     // onnegotiationneeded
@@ -46,14 +48,14 @@ function connectStream(url) {
 
         await webrtc.setLocalDescription(offer)
 
-        $.post(url,{
+        $.post(trg_url, {
             data: btoa(webrtc.localDescription.sdp)
-        }, function(data){
+        }, function (data) {
             try {
                 webrtc.setRemoteDescription(
-                    new RTCSessionDescription({ 
-                        type: 'answer', 
-                        sdp: atob(data) 
+                    new RTCSessionDescription({
+                        type: 'answer',
+                        sdp: atob(data)
                     })
                 )
             } catch (e) {
@@ -91,7 +93,7 @@ function pauseStream() {
     videoEl.pause();
 }
 
-function stopStream(){
+function stopStream() {
     console.log("Stop Stream");
     videoEl.pause();
     webrtc.close();

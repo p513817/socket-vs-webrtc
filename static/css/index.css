@@ -36,4 +36,12 @@
 .wid-8 { width: 80%; }
 .wid-full { width: 100%; }
 
-    
+.bt {
+    width: 100%;
+    height: 50px;
+    height: auto;
+}
+
+.hidden {
+    display: none;
+}

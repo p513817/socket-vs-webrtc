@@ -34,9 +34,14 @@ async function logError (xhr, _textStatus, _errorThrown) {
     return( errMsg );
 }
 
-async function getAPI(api, errType=LOG, log=false) {
+async function getAPI(api, errType=LOG, log=false, author) {
 
-    if(log) console.log(`[GET] Called API: ${api}`);
+    // Concate API
+    let trg_api;
+    if(api.includes("http")) trg_api = api;
+    else trg_api = SCRIPT_ROOT + api;
+
+    if(log) console.log(`[GET] Called API: ${trg_api}`);
 
     // Setup error event
     let errEvent;
@@ -45,18 +50,29 @@ async function getAPI(api, errType=LOG, log=false) {
 
     // Call API
     const data = await $.ajax({
-        url: SCRIPT_ROOT + api,
+        url: trg_api,
         type: "GET",
-        dataType: "json",
-        error: errEvent
+        error: errEvent,
+        beforeSend: function(xhr) {
+            if(author){
+                xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+            } else console.log("None authorize");
+        }
     });
     // Return Data
     if (data) return data;
     else return(undefined);
 }
 
-async function postAPI(api, inData, inType=JSON_FMT, errType=LOG) {
+async function postAPI(api, inData, inType=JSON_FMT, errType=LOG, log=false, author) {
     
+    // Concate API
+    let trg_api;
+    if(api.includes("http")) trg_api = api;
+    else trg_api = SCRIPT_ROOT + api;
+
+    if(log) console.log(`[POST] Called API: ${trg_api}`);
+
     // Setup error event
     let errEvent
     let retData;
@@ -66,23 +82,33 @@ async function postAPI(api, inData, inType=JSON_FMT, errType=LOG) {
     // Call API
     if(inType===FORM_FMT){
         retData = await $.ajax({
-            url: SCRIPT_ROOT + api,
+            url: trg_api,
             type: "POST",
             data: inData,
             processData: false,
             contentType: false,
-            error: errEvent
+            error: errEvent,
+            beforeSend: function(xhr) {
+                if(author){
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+                } else console.log("None authorize");
+            }
         });    
     }
 
     if(inType===JSON_FMT){
         retData = await $.ajax({
-            url: SCRIPT_ROOT + api,
+            url: trg_api,
             type: "POST",
             data: JSON.stringify(inData),
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            error: errEvent
+            error: errEvent,
+            beforeSend: function(xhr) {
+                if(author){
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+                } else console.log("None authorize");
+            }
         });    
     }
 
