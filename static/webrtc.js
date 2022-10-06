@@ -1,9 +1,7 @@
 // Create P2P Service
-let webrtc; 
+let webrtc;
 
 const videoEl = document.querySelector('#webrtc-video')
-const webrtcUrl = document.querySelector('#webrtc-url').value
-
 
 function connectStream() {
 
@@ -37,8 +35,8 @@ function connectStream() {
     /* About Transceiver
         Reference   : https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTransceiver
         Example     : rtpTransceiver = RTCPeerConnection.addTransceiver(trackOrKind, init);
-    */    
-   console.log("Add Transceiver");
+    */
+    console.log("Add Transceiver");
     webrtc.addTransceiver('video', { 'direction': 'sendrecv' })
 
     // onnegotiationneeded
@@ -50,14 +48,14 @@ function connectStream() {
 
         await webrtc.setLocalDescription(offer)
 
-        $.post(trg_url,{
+        $.post(trg_url, {
             data: btoa(webrtc.localDescription.sdp)
-        }, function(data){
+        }, function (data) {
             try {
                 webrtc.setRemoteDescription(
-                    new RTCSessionDescription({ 
-                        type: 'answer', 
-                        sdp: atob(data) 
+                    new RTCSessionDescription({
+                        type: 'answer',
+                        sdp: atob(data)
                     })
                 )
             } catch (e) {
@@ -95,7 +93,7 @@ function pauseStream() {
     videoEl.pause();
 }
 
-function stopStream(){
+function stopStream() {
     console.log("Stop Stream");
     videoEl.pause();
     webrtc.close();
