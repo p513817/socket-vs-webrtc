@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorrt:21.03-py3 as base
+FROM ubuntu:20.04
 
 # Setup Time Zone
 ARG TIMEZONE=Asia/Taipei
@@ -36,11 +36,21 @@ RUN apt-get install -y libgstreamer1.0-dev \
     gir1.2-gst-rtsp-server-1.0
 
 # Rebuild: OpenCV with ffmpeg and gst plugin
+RUN apt-get install cmake -y
+
+# sudo apt-get install build-essential
+# wget http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz
+# tar xf cmake-3.2.2.tar.gz
+# cd cmake-3.2.2
+# ./configure
+# make
+
 RUN apt-get install ffmpeg -y \
     && wget https://github.com/opencv/opencv/archive/4.5.3.zip \
     && unzip 4.5.3.zip && rm 4.5.3.zip \
-    && mkdir ./opencv-4.5.3/build && cd ./opencv-4.5.3/build \
-    && cmake -DCUDA_FAST_MATH=ON .. \
+    && mkdir ./opencv-4.5.3/build \
+    && cd ./opencv-4.5.3/build \
+    && cmake .. \
     && make -j"$(nproc)" \
     && make install
 
