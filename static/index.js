@@ -174,7 +174,7 @@ async function sourceControlEvent(event){
 
 async function sourceElementHandler(intype){
 
-    let sourceEleList = [ 'source-v4l2-div', 'source-rtsp-div', 'source-file-div' ];
+    let sourceEleList = [ 'source-v4l2', 'source-rtsp', 'source-file' ];
 
     for(let i=0; i<sourceEleList.length; i++){
         const srcName   = sourceEleList[i];
@@ -184,7 +184,7 @@ async function sourceElementHandler(intype){
         if( srcName.includes(intype.toLowerCase()) ){
             console.log(`Select ${srcName}`);
             await sourceEvent(intype);
-            displayKey = "block";
+            displayKey = "unset";
         }
         srcEle.style = `display: ${displayKey}`;
     }
