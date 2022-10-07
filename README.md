@@ -3,7 +3,7 @@ A simple demo to compare the performance between socket and webrtc ( rtsp )
 
 # Demo
 Flask-socket provide a lower speed when streaming, and WebRTC will delay for a second because the buffer must be collected at first.
-* GIF ( 20 FPS )
+* GIF ( 12 FPS )
     ![DEMO](./figures/socket-vs-webrtc.gif)
 * Video - [flask-socket vs webrtc ( youtube )](https://youtu.be/jth1QB32Ask)
 
