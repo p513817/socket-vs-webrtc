@@ -5,6 +5,7 @@ const videoEl = document.querySelector('#webrtc-video')
 
 function connectStream() {
 
+    $.LoadingOverlay("show");
     console.log("Start to connect WebRTC");
 
     // Create RTCPeerConnection
@@ -22,20 +23,9 @@ function connectStream() {
     trg_url = `http://172.16.92.130:8083/stream/${streamID}/channel/0/webrtc`;
     console.log(`Get URL: ${trg_url}`);
 
-    // ontrack
-    // 完成連線後，透過該事件能夠在發現遠端傳輸的多媒體檔案時觸發，來處理/接收多媒體數據。
-    console.log("Define Track Event");
-    webrtc.ontrack = function (event) {
-        console.log(event.streams.length + ' track is delivered')
-        videoEl.srcObject = event.streams[0]
-        videoEl.play()
-    }
-
-    // Add Transceiver to capture the video
-    /* About Transceiver
-        Reference   : https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTransceiver
-        Example     : rtpTransceiver = RTCPeerConnection.addTransceiver(trackOrKind, init);
-    */
+    // Add Track or Transceiver to capture the video
+    // 建立 RTP Stream 每次隨機產生 SSRC， 在 createOffer 的 SDP 當中會帶入
+    // 並且建立 media session，當 ICE 成功建立 SRTP 連線就會把 Media Packet 送出去
     console.log("Add Transceiver");
     webrtc.addTransceiver('video', { 'direction': 'sendrecv' })
 
@@ -44,15 +34,22 @@ function connectStream() {
     console.log("Define Negotiation");
     webrtc.onnegotiationneeded = async function handleNegotiationNeeded() {
 
+        // 建立請求
         const offer = await webrtc.createOffer()
 
+        // 提供本地端的資訊
         await webrtc.setLocalDescription(offer)
 
+        // 使用 http 與 remote 進行請求，需要透過 sdp 去請求
         $.post(trg_url, {
             data: btoa(webrtc.localDescription.sdp)
         }, function (data) {
             try {
+
+                // 如果同意的話就會回傳資訊，透過該資訊設定 WebRTC Remote 端的資訊
+                // 當雙方都 setRemoteDescription 就可以開始連線
                 webrtc.setRemoteDescription(
+
                     new RTCSessionDescription({
                         type: 'answer',
                         sdp: atob(data)
@@ -62,6 +59,15 @@ function connectStream() {
                 console.warn(e);
             }
         })
+    }
+
+    // ontrack
+    // 完成連線後，透過該事件能夠在發現遠端傳輸的多媒體檔案時觸發，來處理/接收多媒體數據。
+    console.log("Define Track Event");
+    webrtc.ontrack = function (event) {
+        console.log(event.streams.length + ' track is delivered')
+        videoEl.srcObject = event.streams[0]
+        videoEl.play()
     }
 
     // 建立 P2P 中雙向資料傳輸的通道
@@ -80,6 +86,7 @@ function connectStream() {
     }
     // 呼叫 send() 並且兩邊都連接上的時候
     webrtcSendChannel.onmessage = event => console.log(event.data)
+    $.LoadingOverlay("hide");
 }
 
 function startStream() {
