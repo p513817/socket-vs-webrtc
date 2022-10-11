@@ -30,6 +30,7 @@ class Source():
         self.src = None
         self.ret, self.frame = None, None
         self.first_frame, self.first_frame_ready = None, False
+        self.fps = 30
         
         self.input_data = input_data.rstrip().replace('\n', '').replace(' ', '')
         self.intype = intype
@@ -37,7 +38,6 @@ class Source():
         logging.warning('Detect source type is : {}'.format(self.intype))
         
         self.get_src()
-
         self.ret, self.frame = self.src.read()
 
         self.start_time = time.time() 
@@ -53,6 +53,8 @@ class Source():
             if self.intype in [ 'V4L2', 'Video', 'RTSP' ]:
                 
                 self.src = cv2.VideoCapture(self.input_data)
+                self.fps = self.src.get(cv2.CAP_PROP_FPS)
+                logging.info("Detect FPS: {}".format(self.fps))
 
                 if self.intype == 'V4L2':
                     self.src.set(6, cv2.VideoWriter.fourcc('M','J','P','G'))
@@ -107,7 +109,7 @@ class Source():
             self.ret, self.frame = ret, frame
 
             if(self.intype=='Video'):
-                time.sleep(1/60)
+                time.sleep(1/self.fps)
 
     def get_index(self):
         return self.frame_idx

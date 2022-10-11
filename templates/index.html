@@ -13,13 +13,13 @@
     <div class="container wid-full">
         
         <div class="wid-2">
-            <p>Source Name</p>
+            <a>Source Name</a>
             <input type="text" id="source-name" value="default">
         </div>
         
         <div class="wid-2">
 
-            <p>Source Type</p>
+            <a>Source Type</a>
             <select id="source-type">
                 <option>--- Select ---</option>
                 <option value="V4L2">USB-Cam</option>
@@ -30,8 +30,14 @@
 
         <div class="wid-2">
 
-            <p>Source</p>
-            <div id="source-v4l2-div" class="" style="display: block">
+            <a>Source</a>
+            <select id="source-v4l2" style="display: unset">
+                <option>--- Select ---</option>
+            </select>
+            <input id="source-rtsp" style="display: none" type="text" class="bg-light border-0" placeholder="" aria-label="source-rtsp">
+            <input type="file" style="display: none" accept="image/*,video/*" class="custom-file-input" data-target="source-file" id="source-file">
+
+            <!-- <div id="source-v4l2-div" class="" style="display: block">
                 <select id="source-v4l2">
                     <option>--- Select ---</option>
                 </select>
@@ -41,12 +47,12 @@
             </div>
             <div id="source-file-div" style="display: none">
                 <input type="file" accept="image/*,video/*" class="custom-file-input" data-target="source-file" id="source-file">
-            </div>
+            </div> -->
 
         </div>
 
         <div class="wid-2">
-            <p>Event</p>
+            <a>Event</a>
             <button id="addSrcButton" onclick="addSrc()">Add</button>
             <button id="delSrcButton" onclick="delSrc()">Del</button>
 
@@ -54,7 +60,7 @@
         
     </div>
 
-    
+    <hr>
     <h1>Compare Socket and WebRTC</h1>
 
     <!-- Select Source -->
@@ -62,8 +68,6 @@
         <a>Source List  </a>
         <select id="stream-list"></select>  
     </div>
-
-    <hr>
 
     <!-- Compare -->
     <div class="container">
