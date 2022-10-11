@@ -50,16 +50,22 @@ async function getAPI(api, errType=LOG, log=false, author) {
     else errEvent = logError;
 
     // Call API
-    const data = await $.ajax({
-        url: trg_api,
-        type: "GET",
-        error: errEvent,
-        beforeSend: function(xhr) {
-            if(author){
-                xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
-            } else console.log("None authorize");
-        }
-    });
+    let data;
+    try {
+        data = await $.ajax({
+            url: trg_api,
+            type: "GET",
+            error: errEvent,
+            beforeSend: function(xhr) {
+                if(author){
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+                } else console.log("None authorize");
+            }
+        });
+    } catch (e) {
+        alert(`Failed in ${trg_api} ... ` + e );
+    }
+
     $.LoadingOverlay("hide");
     // Return Data
     if (data) return data;
@@ -83,36 +89,40 @@ async function postAPI(api, inData, inType=JSON_FMT, errType=LOG, log=false, aut
     else errEvent = logError;
 
     // Call API
-    if(inType===FORM_FMT){
-        retData = await $.ajax({
-            url: trg_api,
-            type: "POST",
-            data: inData,
-            processData: false,
-            contentType: false,
-            error: errEvent,
-            beforeSend: function(xhr) {
-                if(author){
-                    xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
-                } else console.log("None authorize");
-            }
-        });    
-    }
+    try {
+        if(inType===FORM_FMT){
+            retData = await $.ajax({
+                url: trg_api,
+                type: "POST",
+                data: inData,
+                processData: false,
+                contentType: false,
+                error: errEvent,
+                beforeSend: function(xhr) {
+                    if(author){
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+                    } else console.log("None authorize");
+                }
+            });    
+        }
 
-    if(inType===JSON_FMT){
-        retData = await $.ajax({
-            url: trg_api,
-            type: "POST",
-            data: JSON.stringify(inData),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            error: errEvent,
-            beforeSend: function(xhr) {
-                if(author){
-                    xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
-                } else console.log("None authorize");
-            }
-        });    
+        if(inType===JSON_FMT){
+            retData = await $.ajax({
+                url: trg_api,
+                type: "POST",
+                data: JSON.stringify(inData),
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                error: errEvent,
+                beforeSend: function(xhr) {
+                    if(author){
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa('demo' + ":" + 'demo'));
+                    } else console.log("None authorize");
+                }
+            });    
+        }
+    } catch (e) {
+        alert(`Failed in ${trg_api} ... ` + e );
     }
 
     // Return Data
